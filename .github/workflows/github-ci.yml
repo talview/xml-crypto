@@ -1,0 +1,27 @@
+name: Publishing Package
+on:
+  # publish package only when a release is created.
+  release:
+    types: [created]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    # Setup .npmrc file to publish to GitHub Packages
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+        registry-url: 'https://npm.pkg.github.com'
+        # Defaults to the user or organization that owns the workflow file
+        scope: '@talview'
+    - run: npm install
+      env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_PKG_INSTALL_TOKEN }}
+    - run: |
+        export version=$(echo "${{ github.ref }}" | cut -d "/" -f 3)
+        echo $version
+        substr=beta
+        [[ "$version" == *"$substr"* ]] && npm publish --tag beta || npm publish
+      env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
