@@ -1,6 +1,6 @@
 {
-  "name": "xml-crypto",
-  "version": "2.1.2",
+  "name": "@talview/xml-crypto",
+  "version": "1.0.0-beta.1",
   "description": "Xml digital signature and encryption library for Node.js",
   "engines": {
     "node": ">=0.4.0"
